@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import ProductForm from "./components/ProductForm";
 import ProductList from "./components/ProductList";
+import MyIconPluss from "./components/icons/MyIconPluss";
 
 export default function Home () {
   const [products, setProducts] = useState([]);
@@ -81,21 +82,44 @@ export default function Home () {
   };
 
   return (
-    <div className="p-8 max-w-3xl mx-auto">
-      <h1 className="text-3xl font-bold mb-4">Inventario de Productos</h1>
+    <div className="p-8 max-w-full mx-auto">
+      <h1 className="text-3xl font-bold mb-4 text-center">Inventario de Productos</h1>
+      <div className="fixed bottom-2 left-1/2 transform -translate-x-1/2 z-50 pb-8">
+        <button
+          onClick={toggleForm}
+          className="flex flex-row px-4 py-3 gap-1 text-white rounded-full items-center h-fit
+          bg-green-400 hover:bg-green-500 
+          dark:hover:bg-[var(--bg-add-dark-2)] dark:bg-[var(--bg-add-dark)]
+          transition delay-110 duration-300 ease-in-out hover:-translate-y-1 hover:scale-105"
+        >
+          <p className="py-px-5 text-xl font-semibold"> Agregar producto</p>
+          <MyIconPluss strokeWidth={4} />
 
-      <button
-        onClick={toggleForm}
-        className="mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-      >
-        {showForm ? "Cancelar" : "Agregar Producto"}
-      </button>
+        </button>
+      </div>
 
       {showForm && (
-        <div className="mb-6 p-4 border border-gray-300 rounded shadow">
-          <ProductForm onSave={handleSave} editProduct={editProduct} />
-        </div>
+        <Fragment>
+          <div
+            className="fixed inset-0 bg-black/30 z-60"
+            onClick={toggleForm}
+          >
+            <div className="fixed inset-0 flex items-center justify-center z-50">
+              <div
+                className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-lg w-full max-w-[480px] z-50"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <ProductForm
+                  onSave={handleSave}
+                  editProduct={editProduct}
+                  onCancel={toggleForm}
+                />
+              </div>
+            </div>
+          </div>
+        </Fragment>
       )}
+
 
       <ProductList
         products={products}
